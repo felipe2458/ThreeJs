@@ -1,7 +1,7 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-
+import * as dat from 'dat.gui';
 @Component({
   selector: 'app-initial',
   templateUrl: './initial.component.html',
@@ -68,17 +68,46 @@ export class InitialComponent {
       //* Pode-se passar 3 argumentos, o primeiro define o tamanho da esfera, o segundo define a quantidade de subdivisões horizontal(em outras palavras, a segunda definie o tanto de lados que a "esfera" vai ter na horizontal) e o terceiro define a quantidade de subdivisões vertical(em outras palavras, a terceira definie o tanto de lados que a "esfera" vai ter na vertival)
       const sphereGeometry = new THREE.SphereGeometry(3, 30, 40);
       const sphereMaterial = new THREE.MeshBasicMaterial({
-        color: 0x291377,
+        color: 0x00ff62,
         //* Mostra a grade do elemento ao invés de pinta-la por completo (true)
         wireframe: false
        });
       const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
       scene.add(sphere);
 
+      sphere.position.set(-10, 10, 0);
+
+      //* Adicionando a biblioteca de controle de animação
+      const gui = new dat.GUI()
+
+      //* Adicionando o painel de controle
+      const options = {
+        sphereColor: "#00ff62",
+        wireframe: false,
+        speed: 0.01
+      }
+
+      gui.addColor(options, 'sphereColor').onChange(function(e){
+        sphere.material.color.set(e)
+      })
+
+      gui.add(options, 'wireframe').onChange(function(e){
+        sphere.material.wireframe = e
+      })
+
+      //* Fazendo a esfera "saltar"
+      gui.add(options, 'speed', 0, 0.1)
+
+      let step = 0;
+
       //* Animação para a caixa ficar girando
       function animate(){
         box.rotation.x += 0.01;
         box.rotation.y += 0.01;
+
+        step += options.speed
+        sphere.position.y = 10 * Math.abs(Math.sin(step))
+
         renderer.render(scene, camera);
       }
 
