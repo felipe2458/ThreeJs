@@ -209,6 +209,18 @@ export class InitialComponent {
 
       let step = 0;
 
+      //* Executando algo quando o usuário passa o mouse por cima do objeto
+      const mousePosition = new THREE.Vector2();
+
+      window.addEventListener('mousemove', function(e){
+        mousePosition.x = (e.clientX / window.innerWidth) * 2 - 1;
+        mousePosition.y = -(e.clientY / window.innerHeight) * 2 + 1;
+      })
+
+      const rayCaster = new THREE.Raycaster();
+
+      box2.name = 'box2';
+
       function animate(){
         //* Animação para a caixa ficar girando
         box.rotation.x += 0.01;
@@ -234,6 +246,34 @@ export class InitialComponent {
         //* Opções de eixo do holofote
         spotLight.position.set(options.axle.x, options.axle.y, options.axle.z)
         sLightHelper.update()
+
+        //* Executando algo quando o usuário passa o mouse por cima do objeto
+        rayCaster.setFromCamera(mousePosition, camera);
+        const intersects = rayCaster.intersectObjects(scene.children);
+        
+
+        for(let i = 0; i < intersects.length; i++){
+          const obj = intersects[i].object;
+          if(obj instanceof THREE.Mesh){
+            const mat = obj.material;
+            if(Array.isArray(mat)){
+              mat.forEach(m => {
+                if(m instanceof THREE.MeshStandardMaterial || m instanceof THREE.MeshBasicMaterial || m instanceof THREE.MeshLambertMaterial){
+                  m.color.set(0xff0000);
+                }
+              });
+            }else{
+              if(mat instanceof THREE.MeshStandardMaterial || mat instanceof THREE.MeshBasicMaterial || mat instanceof THREE.MeshLambertMaterial){
+                mat.color.set(0x00b6f3);
+              }
+            }
+          }
+
+          if(obj.name === 'box2'){
+            obj.rotation.x += 0.01;
+            obj.rotation.y += 0.01;
+          }
+        }
 
         renderer.render(scene, camera);
       }
