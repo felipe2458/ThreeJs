@@ -123,6 +123,19 @@ export class InitialComponent {
       const sLightHelper = new THREE.SpotLightHelper(spotLight);
       scene.add(sLightHelper);
 
+      //* Adicionando neblina
+      //* 1 opção: Pode-se passar 3 argumentos, o primeiro define a cor da neblina, o segundo define a distancia minima onde a neblina começa a aparecer a partir da posição da câmera(terceiro argumento), o terceiro define a distancia onde onde a neblina atinge o seu máximo de intensidade
+      //scene.fog = new THREE.Fog(0x000000, 0, 200);
+      //* 2 opção: Pode-se passar 2 argumentos, o primeiro define a cor da neblina e o segundo controla a densidade da neblina de acordo com a distância da câmera
+      scene.fog = new THREE.FogExp2(0x000000, 0.005);
+
+      //* Mudando o background
+      //* Cor solida
+      renderer.setClearColor(0x5100ff);
+      //* Imagem como background
+      /*const textureLoader = new THREE.TextureLoader();
+      scene.background = textureLoader.load('assets/images/bg-renderer.jpg');*/
+
       //* Adicionando a biblioteca de controle de animação
       const gui = new dat.GUI()
 
