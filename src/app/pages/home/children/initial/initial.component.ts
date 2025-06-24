@@ -51,6 +51,7 @@ export class InitialComponent {
       const boxMaterial = new THREE.MeshLambertMaterial({ color: 0x10aab3 });
       const box = new THREE.Mesh(boxGeometry, boxMaterial);
       scene.add(box);
+      box.receiveShadow = true;
       //box.position.set(0, 2, 0);
 
       //* Criando e adicionando o plano ao cenário
@@ -85,6 +86,43 @@ export class InitialComponent {
       sphere.position.set(-10, 10, 0);
       //* Habilitando sombra (recebida e enviada)
       sphere.castShadow = true;
+
+      //* Crindo uma segunda caixa com texture
+      const textureLoader = new THREE.TextureLoader();
+      const urlImagem = 'assets/images/Wood/Wood007_1K-JPG_Color.jpg';
+      const urlNormal = 'assets/images/Wood/Wood007_1K-JPG_Roughness.jpg';
+
+      //* Criando caixa com varias texturas
+      const box2Material = [
+        new THREE.MeshBasicMaterial({
+          map: textureLoader.load(urlImagem)
+        }),
+        new THREE.MeshBasicMaterial({
+          map: textureLoader.load(urlImagem)
+        }),
+        new THREE.MeshBasicMaterial({
+          map: textureLoader.load(urlNormal)
+        }),
+        new THREE.MeshBasicMaterial({
+          map: textureLoader.load(urlImagem)
+        }),
+        new THREE.MeshBasicMaterial({
+          map: textureLoader.load(urlNormal)
+        }),
+        new THREE.MeshBasicMaterial({
+          map: textureLoader.load(urlImagem)
+        }),
+      ]
+
+      const boxGeometry2 = new THREE.BoxGeometry(4, 4, 4);
+      /*const boxMaterial2 = new THREE.MeshBasicMaterial({
+        color: 0x3b2b17,
+        map: textureLoader.load('assets/images/Wood/Wood007_1K-JPG_Color.jpg')
+       });*/
+      const box2 = new THREE.Mesh(boxGeometry2, box2Material);
+      scene.add(box2);
+      box2.position.set(5, 5, 5);
+      box2.receiveShadow = true;
 
       /*
       //* Adicionando uma luz de ambiente
@@ -164,17 +202,23 @@ export class InitialComponent {
       //* Opções de sombra
       gui.add(options, 'angle', 0, 1)
       gui.add(options, 'penumbra', 0, 1)
-      gui.add(options, 'intensity', 0, 1000000)
+      gui.add(options, 'intensity', 0, 300000)
       gui.add(options.axle, 'x', -200, 200)
       gui.add(options.axle, 'y', -200, 200)
       gui.add(options.axle, 'z', -200, 200)
 
       let step = 0;
 
-      //* Animação para a caixa ficar girando
       function animate(){
+        //* Animação para a caixa ficar girando
         box.rotation.x += 0.01;
         box.rotation.y += 0.01;
+
+        //* Fazendo o holofote girar
+        options.axle.x += 0.1;
+        options.axle.y += 0.1;
+        spotLight.position.set(options.axle.x, options.axle.y, options.axle.z)
+        sLightHelper.update()
 
         //* Fazendo a esfera saltar
         step += options.speed
