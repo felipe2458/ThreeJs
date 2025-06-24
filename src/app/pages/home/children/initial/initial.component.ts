@@ -39,7 +39,7 @@ export class InitialComponent {
 
       //* Posição e rotação da câmera
       camera.lookAt(0, 0, 0);
-      camera.position.set(0, 1, 5);
+      camera.position.set(-10, 30, 30);
       orbit.update();
 
       //* Criando e adicionando a caixa ao cenário
@@ -47,6 +47,33 @@ export class InitialComponent {
       const boxMaterial = new THREE.MeshBasicMaterial({ color: 0x10aab3 });
       const box = new THREE.Mesh(boxGeometry, boxMaterial);
       scene.add(box);
+
+      //* Criando e adicionando o plano ao cenário
+      const planeGeometry = new THREE.PlaneGeometry(30, 30);
+      const planeMaterial = new THREE.MeshBasicMaterial({
+        color: 0x10676b,
+        //* criando o "outro" lado do plano. Sem isso, quando você olha atrás do plano, não aparece a cor
+        side: THREE.DoubleSide,
+       });
+      const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+      scene.add(plane)
+      plane.rotation.x = -Math.PI / 2;
+
+      //* Criando e adicionando uma grade ao cenário
+      const gridHelper = new THREE.GridHelper(30); //* Pode-se passar um segundo argumento para definir a quantidade de divisões da grade
+      scene.add(gridHelper);
+
+      //* Criando e adicionando uma esfera ao cenário
+
+      //* Pode-se passar 3 argumentos, o primeiro define o tamanho da esfera, o segundo define a quantidade de subdivisões horizontal(em outras palavras, a segunda definie o tanto de lados que a "esfera" vai ter na horizontal) e o terceiro define a quantidade de subdivisões vertical(em outras palavras, a terceira definie o tanto de lados que a "esfera" vai ter na vertival)
+      const sphereGeometry = new THREE.SphereGeometry(3, 30, 40);
+      const sphereMaterial = new THREE.MeshBasicMaterial({
+        color: 0x291377,
+        //* Mostra a grade do elemento ao invés de pinta-la por completo (true)
+        wireframe: false
+       });
+      const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+      scene.add(sphere);
 
       //* Animação para a caixa ficar girando
       function animate(){
