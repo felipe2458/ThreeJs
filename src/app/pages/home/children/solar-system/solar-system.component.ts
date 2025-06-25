@@ -49,6 +49,9 @@ export class SolarSystemComponent{
       const width = this.containerElement.nativeElement.offsetWidth;
       const height = this.containerElement.nativeElement.offsetHeight;
 
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
       renderer.setSize(width, height);
 
       this.containerElement.nativeElement.appendChild(renderer.domElement);
@@ -84,7 +87,8 @@ export class SolarSystemComponent{
           innerRadius: number,
           outerRadius: number,
           texture: string
-        } | null
+        } | null = null,
+        moon: boolean = false
       ){
         const geo = new THREE.SphereGeometry(size, 30, 30);
         const mat = new THREE.MeshStandardMaterial({
@@ -95,6 +99,7 @@ export class SolarSystemComponent{
         const pivot = new THREE.Object3D();
 
         mesh.position.x = distance;
+        if(moon) mesh.castShadow = true;
         pivot.add(mesh);
 
         if(ring){
@@ -116,11 +121,34 @@ export class SolarSystemComponent{
         return { mesh, pivot };
       }
 
-      const mercury = createPlanet(3.2, texturas.mercury, 30, null);
-      const venus = createPlanet(5.8, texturas.venus, 44, null);
-      const earth = createPlanet(6, texturas.earth, 62, null);
-      const mars = createPlanet(4, texturas.mars, 78, null);
-      const jupiter = createPlanet(12, texturas.jupiter, 100, null);
+      function createMoon(mesh: InstanceType<typeof THREE.Mesh>, distance: number){
+        const geo = new THREE.SphereGeometry(2, 30, 30);
+        const mat = new THREE.MeshStandardMaterial({
+          map: textureLoader.load(texturas.moon)
+        });
+
+        const centerMesh = new THREE.Mesh(geo, mat);
+
+        mesh.add(centerMesh);
+
+        const moonGeo = new THREE.SphereGeometry(2, 30, 30);
+        const moonMat = new THREE.MeshStandardMaterial({
+          map: textureLoader.load(texturas.moon)
+        });
+
+        const moon = new THREE.Mesh(moonGeo, moonMat);
+        moon.position.set(distance - 50, 0, 0);
+        moon.receiveShadow = true;
+        centerMesh.add(moon);
+
+        return { centerMesh };
+      }
+
+      const mercury = createPlanet(3.2, texturas.mercury, 30);
+      const venus = createPlanet(5.8, texturas.venus, 44);
+      const earth = createPlanet(6, texturas.earth, 62, null, true);
+      const mars = createPlanet(4, texturas.mars, 78);
+      const jupiter = createPlanet(12, texturas.jupiter, 100);
       const saturn = createPlanet(10, texturas.saturn.texture, 138, {
          innerRadius: 10,
          outerRadius: 20,
@@ -131,14 +159,17 @@ export class SolarSystemComponent{
          outerRadius: 12,
          texture: texturas.uranus.rings
       });
-      const neptune = createPlanet(7, texturas.neptune, 200, null);
-      const pluto = createPlanet(2.8, texturas.pluto, 216, null);
+      const neptune = createPlanet(7, texturas.neptune, 200);
+      const pluto = createPlanet(2.8, texturas.pluto, 216);
 
       const ambientLight = new THREE.AmbientLight(0x282828);
       scene.add(ambientLight);
 
       const pointLight = new THREE.PointLight(0xffffff, 5000, 1000);
+      pointLight.castShadow = true;
       scene.add(pointLight);
+
+      const moon = createMoon(earth.mesh, 62);
 
       const lightHelper = new THREE.PointLightHelper(pointLight);
       scene.add(lightHelper);
@@ -155,6 +186,8 @@ export class SolarSystemComponent{
         uranus.mesh.rotateY(0.03);
         neptune.mesh.rotateY(0.032);
         pluto.mesh.rotateY(0.008);
+
+        moon.centerMesh.rotateY(0.13);
 
         mercury.pivot.rotateY(0.04);
         venus.pivot.rotateY(0.015);
