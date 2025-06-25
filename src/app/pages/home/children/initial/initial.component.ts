@@ -295,6 +295,16 @@ export class InitialComponent {
 
       //* Chamando a animação no renderer
       renderer.setAnimationLoop(animate);
+
+      //* Mudando o tamanho da tela quando o usuário redimensionar a janela
+      window.addEventListener('resize', ()=>{
+        const width = this.container.nativeElement.offsetWidth;
+        const height = this.container.nativeElement.offsetHeight;
+
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+        renderer.setSize(width, height);
+      })
     });
   }
 }
