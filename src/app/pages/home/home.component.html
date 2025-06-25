@@ -1,7 +1,10 @@
 <div class="container">
-  <header>
-    <a routerLink="initial">initial</a>
-  </header>
+  @if(activeHeader){
+    <header>
+      <a routerLink="initial">initial</a>
+      <a routerLink="solar-system">solar-system</a>
+    </header>
+  }
 
   <ion-router-outlet></ion-router-outlet>
 </div><!-- container -->

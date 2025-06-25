@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild, OnDestroy } from '@angular/core';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import * as dat from 'dat.gui';
@@ -11,6 +11,9 @@ import { GLTFResult } from 'src/app/interfaces/interface';
 })
 export class InitialComponent {
   @ViewChild('container', { static: true }) container!: ElementRef;
+
+  //* Arrumando erro de duplicação do gui
+  private gui: dat.GUI | null = null;
 
   ngAfterViewInit(){
     //* Chamando a função requestAnimationFrame para que o código seja executado após a renderização(previne erros)
@@ -39,7 +42,7 @@ export class InitialComponent {
       //* Criando a câmera
       const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
 
-      //* Criando o controle de orbitação
+      //* Criando o controle de orbitação(permite o usuário mover a câmera)
       const orbit = new OrbitControls(camera, renderer.domElement);
 
       //* Auxiliar para ver os eixos: x, y, z
@@ -180,7 +183,7 @@ export class InitialComponent {
       scene.background = textureLoader.load('assets/images/bg-renderer.jpg');*/
 
       //* Adicionando a biblioteca de controle de animação
-      const gui = new dat.GUI()
+      this.gui = new dat.GUI()
 
       //* Adicionando objeto 3D ao cenário
       const assetsLoader = new GLTFLoader();
@@ -207,20 +210,20 @@ export class InitialComponent {
         sphere.material.color.set(e)
       })*/
 
-      gui.add(options, 'wireframe').onChange(function(e){
+      this.gui.add(options, 'wireframe').onChange(function(e){
         sphere.material.wireframe = e
       })
 
       //* Fazendo a esfera "saltar"
-      gui.add(options, 'speed', 0, 0.1)
+      this.gui.add(options, 'speed', 0, 0.1)
 
       //* Opções de sombra
-      gui.add(options, 'angle', 0, 1)
-      gui.add(options, 'penumbra', 0, 1)
-      gui.add(options, 'intensity', 0, 300000)
-      gui.add(options.axle, 'x', -200, 200)
-      gui.add(options.axle, 'y', -200, 200)
-      gui.add(options.axle, 'z', -200, 200)
+      this.gui.add(options, 'angle', 0, 1)
+      this.gui.add(options, 'penumbra', 0, 1)
+      this.gui.add(options, 'intensity', 0, 300000)
+      this.gui.add(options.axle, 'x', -200, 200)
+      this.gui.add(options.axle, 'y', -200, 200)
+      this.gui.add(options.axle, 'z', -200, 200)
 
       let step = 0;
 
@@ -306,5 +309,16 @@ export class InitialComponent {
         renderer.setSize(width, height);
       })
     });
+  }
+
+  //* Arrumando erro de duplicação do gui
+  ngOnDestroy(){
+    if(this.gui){
+      this.gui.destroy();
+      this.gui = null;
+    }
+
+    const guiDom = document.querySelector('#dat-gui');
+    if(guiDom) guiDom.remove();
   }
 }

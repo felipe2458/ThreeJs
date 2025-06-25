@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { IonRouterOutlet } from "@ionic/angular/standalone";
 import { RouterLink } from '@angular/router';
 
@@ -13,5 +13,19 @@ import { RouterLink } from '@angular/router';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent{
-  constructor(){}
+  activeHeader: boolean = true;
+
+  constructor(){
+    const activeHeader = localStorage.getItem('activeHeader');
+
+    if(activeHeader) this.activeHeader = activeHeader === 'true';
+  }
+
+  @HostListener('window:keydown', ['$event'])
+  handleKeyDown(e: KeyboardEvent){
+    if(e.ctrlKey && e.shiftKey && e.key === 'F'){
+      this.activeHeader = !this.activeHeader;
+      localStorage.setItem('activeHeader', this.activeHeader.toString());
+    }
+  }
 }
