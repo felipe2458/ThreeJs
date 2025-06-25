@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, OnDestroy } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { CelestialBodyTextures } from 'src/app/interfaces/interface';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
@@ -214,6 +214,4 @@ export class SolarSystemComponent{
       })
     }, 0)
   }
-
-  ngOnDestroy(){}
 }
