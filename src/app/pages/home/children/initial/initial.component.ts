@@ -2,6 +2,8 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import * as dat from 'dat.gui';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { GLTFResult } from 'src/app/interfaces/interface';
 @Component({
   selector: 'app-initial',
   templateUrl: './initial.component.html',
@@ -16,6 +18,9 @@ export class InitialComponent {
       //* Pegando a largura e a altura do container
       const width = this.container.nativeElement.offsetWidth;
       const height = this.container.nativeElement.offsetHeight;
+
+      //* Importando objeto 3D
+      const object3D = new URL('assets/3D/Duck.glb', import.meta.url);
 
       //* Criando o renderizador
       const renderer = new THREE.WebGLRenderer();
@@ -177,6 +182,16 @@ export class InitialComponent {
       //* Adicionando a biblioteca de controle de animação
       const gui = new dat.GUI()
 
+      //* Adicionando objeto 3D ao cenário
+      const assetsLoader = new GLTFLoader();
+      assetsLoader.load(object3D.href, function(gltf: GLTFResult){
+        const model = gltf.scene;
+        scene.add(model);
+        model.position.set(-12, 4, 10);
+      }, undefined, function(err: any){
+          console.error(err);
+      })
+
       //* Adicionando o painel de controle
       const options = {
         sphereColor: "#00ff62",
@@ -210,7 +225,7 @@ export class InitialComponent {
       let step = 0;
 
       //* Executando algo quando o usuário passa o mouse por cima do objeto
-      const mousePosition = new THREE.Vector2();
+      /*const mousePosition = new THREE.Vector2();
 
       window.addEventListener('mousemove', function(e){
         mousePosition.x = (e.clientX / window.innerWidth) * 2 - 1;
@@ -219,7 +234,7 @@ export class InitialComponent {
 
       const rayCaster = new THREE.Raycaster();
 
-      box2.name = 'box2';
+      box2.name = 'box2';*/
 
       function animate(){
         //* Animação para a caixa ficar girando
@@ -248,9 +263,9 @@ export class InitialComponent {
         sLightHelper.update()
 
         //* Executando algo quando o usuário passa o mouse por cima do objeto
-        rayCaster.setFromCamera(mousePosition, camera);
+        /*rayCaster.setFromCamera(mousePosition, camera);
         const intersects = rayCaster.intersectObjects(scene.children);
-        
+
 
         for(let i = 0; i < intersects.length; i++){
           const obj = intersects[i].object;
@@ -273,7 +288,7 @@ export class InitialComponent {
             obj.rotation.x += 0.01;
             obj.rotation.y += 0.01;
           }
-        }
+        }*/
 
         renderer.render(scene, camera);
       }
