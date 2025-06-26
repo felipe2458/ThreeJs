@@ -1,8 +1,6 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
 import { InitialComponent } from './pages/home/children/initial/initial.component';
-import { SolarSystemComponent } from './pages/home/children/solar-system/solar-system.component';
-import { Animate3dComponent } from './pages/home/children/animate3d/animate3d.component';
 
 export const routes: Routes = [
   {
@@ -10,8 +8,9 @@ export const routes: Routes = [
     component: HomeComponent,
     children: [
       { path: 'initial', component: InitialComponent },
-      { path: 'solar-system', component: SolarSystemComponent },
-      { path: '3dAnimated', component: Animate3dComponent },
+      { path: 'solar-system', loadComponent: () => import('./pages/home/children/solar-system/solar-system.component').then(m => m.SolarSystemComponent) },
+      { path: '3dAnimated', loadComponent: () => import('./pages/home/children/animate3d/animate3d.component').then(m => m.Animate3dComponent) },
+      { path: 'physics', loadComponent: () => import('./pages/home/children/physics/physics.component').then(m => m.PhysicsComponent) },
       { path: '', redirectTo: 'initial', pathMatch: 'full' },
     ]
   },
