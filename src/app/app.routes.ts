@@ -11,6 +11,7 @@ export const routes: Routes = [
       { path: 'solar-system', loadComponent: () => import('./pages/home/children/solar-system/solar-system.component').then(m => m.SolarSystemComponent) },
       { path: '3dAnimated', loadComponent: () => import('./pages/home/children/animate3d/animate3d.component').then(m => m.Animate3dComponent) },
       { path: 'physics', loadComponent: () => import('./pages/home/children/physics/physics.component').then(m => m.PhysicsComponent) },
+      { path: 'clickAdd', loadComponent: () => import('./pages/home/children/click-add-object/click-add-object.component').then(m => m.ClickAddObjectComponent) },
       { path: '', redirectTo: 'initial', pathMatch: 'full' },
     ]
   },
