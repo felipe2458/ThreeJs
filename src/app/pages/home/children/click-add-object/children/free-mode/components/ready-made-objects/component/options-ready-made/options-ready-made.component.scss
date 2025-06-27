@@ -1,0 +1,102 @@
+.obj-wrapper{
+  width: 100%;
+  height: 100%;
+
+  .obj{
+    width: 100%;
+    height: 10rem;
+  }
+
+  .obj-options-wrapper{
+    width: 100%;
+    height: calc(100% - 10rem);
+
+    > header{
+      width: 100%;
+      height: 10rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .container-inputs{
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-evenly;
+
+        .input-wrapper{
+          width: calc(50% - .6rem);
+          height: 50%;
+          border: 1px solid #5a5959;
+          background-color: #515251;
+
+          &:last-child{
+            margin-top: .4rem !important;
+          }
+
+          header{
+            max-height: 1rem;
+            padding-left: .2rem !important;
+          }
+
+          .infos{
+            width: 100%;
+            height: calc(100% - 1rem);
+            padding-top: .3rem !important;
+
+            ol{
+              list-style: inside;
+              padding: .2rem 0 0 .2rem !important;
+              display: flex;
+              flex-direction: column;
+              gap: .2rem;
+
+              li{
+                font-size: .8rem;
+                display: flex;
+                gap: .2rem;
+                position: relative;
+                max-height: 1rem;
+
+                label{
+                  cursor: pointer;
+                  &.mg-top{
+                    margin-top: -1px !important;
+                  }
+                }
+
+                select{
+                  max-width: 100% !important;
+                  font-size: .7rem;
+                  border: none;
+                  padding-left: .3rem !important;
+                  font-family: monospace;
+                  cursor: pointer;
+
+                  option{
+                    font-family: monospace;
+                  }
+                }
+
+                input{
+                  cursor: pointer;
+                }
+
+                &.small{
+                  font-size: .7rem;
+                }
+
+                &::before{
+                  content: "•";
+                  color: whitesmoke;
+                  margin-left: .1rem;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

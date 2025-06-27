@@ -1,13 +1,11 @@
 <div class="container">
-  @if(activeHeader){
-    <header>
-      <a routerLink="initial">initial</a>
-      <a routerLink="solar-system">solar-system</a>
-      <a routerLink="3dAnimated">3dAnimated</a>
-      <a routerLink="physics">physics</a>
-      <a routerLink="clickAdd">clickAdd</a>
-    </header>
-  }
+  <header *ngIf="isActiveHeaderService.$activeHeader| async">
+    <a routerLink="initial">initial</a>
+    <a routerLink="solar-system">solar-system</a>
+    <a routerLink="3dAnimated">3dAnimated</a>
+    <a routerLink="physics">physics</a>
+    <a routerLink="clickAdd">clickAdd</a>
+  </header>
 
   <ion-router-outlet></ion-router-outlet>
 </div><!-- container -->

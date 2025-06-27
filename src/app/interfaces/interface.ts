@@ -22,3 +22,17 @@ export interface CelestialBodyTextures{
   sun: string;
   moon: string;
 }
+
+export interface ReadyMadeObj{
+  name: string;
+  selected: boolean;
+  enterOptions: boolean;
+  obj: () => InstanceType<typeof THREE.Mesh>;
+}
+
+export interface ObjRotation{
+  name: string;
+  velocity: string;
+  active: boolean;
+  rotationInWorld: boolean;
+}

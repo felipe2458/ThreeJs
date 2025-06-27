@@ -1,0 +1,42 @@
+<div class="obj-wrapper">
+  <div class="obj" #object></div><!-- obj -->
+  <div class="obj-options-wrapper">
+    <header>
+      <h4>Rotation</h4>
+
+      <div class="container-inputs">
+        @for(objRot of objRotation; track objRot){
+          <div class="input-wrapper">
+            <header>
+              <h6>{{ objRot.name.toLocaleLowerCase() }}:</h6>
+            </header>
+
+            <div class="infos">
+              <ol>
+                <li>
+                  <label class="mg-top" [for]="objRot.name + 'rotation'">active:</label>
+                  <input type="checkbox" [id]="objRot.name + 'rotation'" [ngModel]="objRot.active" (ngModelChange)="objRot.active = $event">
+                </li>
+                <li>
+                  <label [for]="objRot.name + 'velocity'">velocity:</label>
+                  <select [id]="objRot.name + 'velocity'">
+                    <option value="slow">slow</option>
+                    <option value="medium" selected>normal</option>
+                    <option value="fast">fast</option>
+                  </select>
+                </li>
+                <li class="small">
+                  <label [for]="objRot.name + 'rotationInWorld'">rotation in world:</label>
+                  <input type="checkbox" [id]="objRot.name + 'rotationInWorld'" [ngModel]="objRot.rotationInWorld" (ngModelChange)="objRot.rotationInWorld = $event">
+                </li>
+              </ol>
+            </div><!-- infos -->
+          </div><!-- input-wrapper -->
+        }
+
+        <!--<input type="checkbox" [ngModel]="objRotation.y.active" (ngModelChange)="objRotation.y.active = $event">
+        <input type="checkbox" [ngModel]="objRotation.z.active" (ngModelChange)="objRotation.z.active = $event">-->
+      </div><!-- container-input-wrapper -->
+    </header>
+  </div><!-- obj-options-wrapper -->
+</div><!-- obj-wrapper -->

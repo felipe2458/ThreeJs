@@ -1,1 +1,10 @@
-<div class="container" #container></div><!-- container -->
+<div class="container">
+  @if(activeHeader){
+    <header>
+      <a routerLink="initial">initial</a>
+      <a routerLink="free-mode">free-mode</a>
+    </header>
+  }
+
+  <ion-router-outlet [style.height.%]="activeHeader ? 95 : 100"></ion-router-outlet>
+</div><!-- container -->

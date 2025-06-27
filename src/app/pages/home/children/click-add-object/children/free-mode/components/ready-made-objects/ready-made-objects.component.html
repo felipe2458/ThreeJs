@@ -1,0 +1,19 @@
+<div class="container" [style.display]="hasSelectedObject ? 'block' : 'flex'">
+  @for(obj of objects; track obj){
+    @if(!obj.enterOptions){
+      <div class="content-obj">
+        <div class="obj" #object [style.boxShadow]="obj.selected ? '0 0 3px #e9e9e9' : ''" [style.cursor]="obj.selected ? '' : 'pointer'"></div><!-- obj -->
+        @if(obj.selected){
+          <input type="radio" name="object-options" [(ngModel)]="obj.enterOptions" [value]="obj.name" id="object-options" />
+          <label for="object-options">Enter options</label>
+        }@else{
+          <h6 (click)="obj.selected = true">{{ obj.name }}</h6>
+        }
+      </div><!-- content-obj -->
+    }@else{
+      <div class="content-obj-selected">
+        <app-options-ready-made [obj]="obj"></app-options-ready-made>
+      </div><!-- content-obj-selected -->
+    }
+  }
+</div><!-- container -->

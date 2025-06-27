@@ -1,0 +1,27 @@
+<div class="container" #container>
+  <aside class="options">
+    <header>
+      <h5>Options</h5>
+
+      <div class="content-input">
+        <div class="input-wrapper">
+          <input type="radio" id="ready-made-objects" name="object-type" [(ngModel)]="firstInputActive" [value]="true"/>
+          <label for="ready-made-objects">Ready-made objects</label>
+        </div><!-- input-wrapper -->
+
+        <div class="input-wrapper">
+          <input type="radio" id="imports-objects" name="object-type" [(ngModel)]="firstInputActive" [value]="false"/>
+          <label for="imports-objects">Imports objects</label>
+        </div><!-- input-wrapper -->
+      </div><!-- content-input -->
+    </header>
+
+    <section>
+      @if(firstInputActive){
+        <app-ready-made-objects></app-ready-made-objects>
+      }@else{
+        <app-imports-objects></app-imports-objects>
+      }
+    </section>
+  </aside><!-- options -->
+</div><!-- container -->

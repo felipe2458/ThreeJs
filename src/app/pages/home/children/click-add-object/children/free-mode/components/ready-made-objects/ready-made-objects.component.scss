@@ -1,0 +1,33 @@
+.container{
+  width: 100%;
+  height: 100%;
+  justify-content: space-evenly;
+  padding-top: 1rem !important;
+
+  .content-obj{
+    width: 8rem;
+    height: 8rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .4rem;
+
+    .obj{
+      width: 100%;
+      height: 80%;
+    }
+
+    input{
+      display: none;
+    }
+
+    label{
+      color: #c4c4c4;
+    }
+
+    h6, label{
+      cursor: pointer;
+      font-size: 15px;
+    }
+  }
+}

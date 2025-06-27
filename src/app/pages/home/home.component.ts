@@ -1,6 +1,8 @@
 import { Component, HostListener } from '@angular/core';
 import { IonRouterOutlet } from "@ionic/angular/standalone";
 import { RouterLink } from '@angular/router';
+import { IsActiveHeaderService } from '../../services/isActiveHeader/is-active-header.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-home',
@@ -8,6 +10,7 @@ import { RouterLink } from '@angular/router';
   imports: [
     IonRouterOutlet,
     RouterLink,
+    CommonModule
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
@@ -15,7 +18,7 @@ import { RouterLink } from '@angular/router';
 export class HomeComponent{
   activeHeader: boolean = true;
 
-  constructor(){
+  constructor(public isActiveHeaderService: IsActiveHeaderService){
     const activeHeader = localStorage.getItem('activeHeader');
 
     if(activeHeader) this.activeHeader = activeHeader === 'true';
@@ -24,8 +27,7 @@ export class HomeComponent{
   @HostListener('window:keydown', ['$event'])
   handleKeyDown(e: KeyboardEvent){
     if(e.ctrlKey && e.shiftKey && e.key === 'F'){
-      this.activeHeader = !this.activeHeader;
-      localStorage.setItem('activeHeader', this.activeHeader.toString());
+      this.isActiveHeaderService.toggleActiveHeader();
     }
   }
 }
