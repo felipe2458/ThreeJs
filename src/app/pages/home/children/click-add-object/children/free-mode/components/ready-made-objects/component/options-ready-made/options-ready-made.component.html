@@ -18,7 +18,7 @@
                   <input type="checkbox" [id]="objRot.name + 'rotation'" [ngModel]="objRot.active" (ngModelChange)="objRot.active = $event">
                 </li>
                 <li>
-                  <label [for]="objRot.name + 'velocity'">velocity:</label>
+                  <label>velocity:</label>
                   <select [id]="objRot.name + 'velocity'" [(ngModel)]="objRot.velocity" (ngModelChange)="objRot.velocity = $event">
                     <option value="slow">slow</option>
                     <option value="normal">normal</option>
@@ -41,10 +41,60 @@
         <h6>Color and Texture</h6>
       </header>
 
+      <h6>Colors:</h6>
+
       <div class="select-colors">
-        <div class="input-color-wrapper">
-          
-        </div><!-- input-color-wrapper -->
+        @for(
+          colorSel of colorSelect; track colorSel.name){
+          <div class="input-color-wrapper">
+            <header>
+              <h6>{{ colorSel.name.split('-').join(' ') }}</h6>
+            </header>
+
+            <div class="input-color-options" [style.opacity]="colorSel.name === colorSelected ? '1' : '.5'" [style.pointerEvents]="colorSel.name === colorSelected ? 'all' : 'none'">
+              <ul>
+                <li>
+                  <label [for]="colorSel.name + '-active'" [style.pointerEvents]="'all'">active:</label>
+                  <input type="radio" name="color-active" [id]="colorSel.name + '-active'" [style.pointerEvents]="'all'" [value]="colorSel.name" [(ngModel)]="colorSelected">
+                </li>
+
+                @if(colorSel.color){
+                  <li>
+                    <label>
+                      color:
+                      <input type="color" [id]="colorSel.name + 'color'" [value]="colorSel.color" [(ngModel)]="colorSel.color">
+
+                      <div class="input-color" [style.backgroundColor]="colorSel.color"></div><!-- input-color -->
+                    </label>
+                  </li>
+                }@else{
+                  <li>
+                    <label>
+                      side:
+                      <select [(ngModel)]="colorComplexSelectedSide">
+                        <option value="front">front</option>
+                        <option value="back">back</option>
+                        <option value="top">top</option>
+                        <option value="bottom">bottom</option>
+                        <option value="left">left</option>
+                        <option value="right">right</option>
+                      </select>
+                    </label>
+                  </li>
+
+                  <li>
+                    <label>
+                      color:
+                      <input type="color" [id]="colorSel.name + 'color'" [value]="colorSel.color" [(ngModel)]="selectedColorComplex">
+
+                      <div class="input-color" [style.backgroundColor]="selectedColorComplex"></div><!-- input-color -->
+                    </label>
+                  </li>
+                }
+              </ul>
+            </div><!-- input-color-options -->
+          </div><!-- input-color-wrapper -->
+        }
       </div><!-- select-colors -->
     </section>
   </div><!-- obj-options-wrapper -->

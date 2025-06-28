@@ -42,4 +42,10 @@ export interface ObjRotationVelocity{
   y: number;
   z: number;
 }
+export interface ColorSelect{
+  name: string;
+  color?: string;
+  colors?: [string, string, string, string, string, string];
+}
 
+export type ColorComplexSelectedSide = 'top' | 'bottom' | 'left' | 'right' | 'front' | 'back';

@@ -15,7 +15,7 @@ import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockCont
   styleUrls: ['./free-mode.component.scss'],
 })
 export class FreeModeComponent{
-  @ViewChild('container') containerEl!: ElementRef;
+  @ViewChild('containerEl') containerEl!: ElementRef;
 
   firstInputActive: boolean = true;
   activeFps: boolean = false;

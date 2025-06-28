@@ -1,13 +1,32 @@
 .container{
   width: 100%;
   min-height: 105%;
-  position: relative;
+  display: flex;
+
+  .containerEl{
+    width: 80%;
+    height: 100%;
+    position: relative;
+
+    .crosshair{
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 20px;
+      height: 20px;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      z-index: 1000;
+      background:
+        linear-gradient(to right, transparent 8px, white 9px, white 11px, transparent 12px),
+        linear-gradient(to bottom, transparent 8px, white 9px, white 11px, transparent 12px);
+    }
+  }
 
   aside.options{
     width: 20%;
     height: 100%;
-    position: absolute;
-    top: 0;
+    position: relative;
     right: 0;
     background: linear-gradient(to bottom, #2b2a2a, #5f5f5f);
     user-select: none;
@@ -60,17 +79,4 @@
     }
   }
 
-  .crosshair{
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    width: 20px;
-    height: 20px;
-    pointer-events: none;
-    transform: translate(-50%, -50%);
-    z-index: 1000;
-    background:
-      linear-gradient(to right, transparent 8px, white 9px, white 11px, transparent 12px),
-      linear-gradient(to bottom, transparent 8px, white 9px, white 11px, transparent 12px);
-  }
 }

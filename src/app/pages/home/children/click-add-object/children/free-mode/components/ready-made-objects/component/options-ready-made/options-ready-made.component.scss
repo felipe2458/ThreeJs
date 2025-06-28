@@ -104,7 +104,6 @@
   section{
     width: 100%;
     height: 10rem;
-    background-color: red;
 
     header{
       width: 100%;
@@ -113,10 +112,87 @@
       padding: 1rem 0 !important;
     }
 
+    > h6{
+      padding: .5rem 0 .5rem .3rem !important;
+    }
+
     .select-colors{
       width: 100%;
       height: 100%;
-      background-color: red;
+      display: flex;
+      justify-content: space-around;
+
+      .input-color-wrapper{
+        width: calc(50% - .5rem);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        background-color: #3f3f3f;
+
+        header{
+          text-align: center;
+          width: 100%;
+          padding: .5rem 0 !important;
+        }
+
+        .input-color-options{
+          width: 100%;
+          height: 75%;
+
+          ul{
+            list-style-position: inside;
+
+            li{
+              display: flex;
+              align-items: center;
+              padding: .3rem 0 !important;
+              gap: .3rem;
+
+              label{
+                display: flex;
+                gap: .5rem;
+                align-items: center;
+
+                input[type=color]{
+                  display: none;
+                }
+
+                .input-color{
+                  width: 3rem;
+                  height: .8rem;
+                  border: 1px solid white;
+                  cursor: pointer;
+                }
+
+                select{
+                  min-width: 3.7rem !important;
+                  height: 1rem;
+                  font-size: .6rem;
+                  border: none;
+                  padding-left: .3rem !important;
+                  font-family: monospace;
+                  letter-spacing: 0.5px;
+                  cursor: pointer;
+
+                  option{
+                    font-family: monospace;
+                  }
+                }
+              }
+
+              &::before{
+                content: "•";
+                color: whitesmoke;
+                max-height: .3rem !important;
+                margin-left: .2rem !important;
+                margin-top: .2rem !important;
+                display: flex;
+                align-items: center;
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

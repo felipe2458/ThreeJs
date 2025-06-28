@@ -1,4 +1,10 @@
-<div class="container" #container>
+<div class="container">
+  <div class="containerEl" #containerEl>
+    @if(activeFps){
+      <div class="crosshair"></div><!-- crosshair -->
+    }
+  </div><!-- containerEl -->
+
   <aside class="options">
     <header>
       <h5>Options</h5>
@@ -24,8 +30,4 @@
       }
     </section>
   </aside><!-- options -->
-
-  @if(activeFps){
-    <div class="crosshair"></div><!-- crosshair -->
-  }
 </div><!-- container -->
