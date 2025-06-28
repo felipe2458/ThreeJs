@@ -19,9 +19,9 @@
                 </li>
                 <li>
                   <label [for]="objRot.name + 'velocity'">velocity:</label>
-                  <select [id]="objRot.name + 'velocity'">
+                  <select [id]="objRot.name + 'velocity'" [(ngModel)]="objRot.velocity" (ngModelChange)="objRot.velocity = $event">
                     <option value="slow">slow</option>
-                    <option value="medium" selected>normal</option>
+                    <option value="normal">normal</option>
                     <option value="fast">fast</option>
                   </select>
                 </li>
@@ -33,10 +33,19 @@
             </div><!-- infos -->
           </div><!-- input-wrapper -->
         }
-
-        <!--<input type="checkbox" [ngModel]="objRotation.y.active" (ngModelChange)="objRotation.y.active = $event">
-        <input type="checkbox" [ngModel]="objRotation.z.active" (ngModelChange)="objRotation.z.active = $event">-->
       </div><!-- container-input-wrapper -->
     </header>
+
+    <section>
+      <header>
+        <h6>Color and Texture</h6>
+      </header>
+
+      <div class="select-colors">
+        <div class="input-color-wrapper">
+          
+        </div><!-- input-color-wrapper -->
+      </div><!-- select-colors -->
+    </section>
   </div><!-- obj-options-wrapper -->
 </div><!-- obj-wrapper -->

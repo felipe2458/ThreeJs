@@ -2,7 +2,7 @@ import { Component, ElementRef, ViewChildren } from '@angular/core';
 import { OptionsReadyMadeComponent } from './component/options-ready-made/options-ready-made.component';
 import { ReadyMadeObj } from 'src/app/interfaces/interface';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms'
+import { FormsModule, NonNullableFormBuilder } from '@angular/forms'
 import * as THREE from 'three';
 
 @Component({
@@ -18,9 +18,9 @@ export class ReadyMadeObjectsComponent{
       name: 'simple box',
       selected: false,
       enterOptions: false,
-      obj: () => {
-        const boxGeo = new THREE.BoxGeometry(1, 1, 1);
-        const boxMat = new THREE.MeshStandardMaterial({ color: 0x00ff22, side: THREE.DoubleSide });
+      obj: (color = 0x00e2b1, size = 1) => {
+        const boxGeo = new THREE.BoxGeometry(size, size, size);
+        const boxMat = new THREE.MeshStandardMaterial({ color, side: THREE.DoubleSide });
         return new THREE.Mesh(boxGeo, boxMat);
       }
     }

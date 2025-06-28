@@ -5,6 +5,7 @@ import * as CANNON from 'cannon-es';
 import { FormsModule } from '@angular/forms';
 import { ReadyMadeObjectsComponent } from './components/ready-made-objects/ready-made-objects.component';
 import { ImportsObjectsComponent } from './components/imports-objects/imports-objects.component';
+import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockControls';
 
 @Component({
   selector: 'app-free-mode',
@@ -17,6 +18,7 @@ export class FreeModeComponent{
   @ViewChild('container') containerEl!: ElementRef;
 
   firstInputActive: boolean = true;
+  activeFps: boolean = false;
 
   ngAfterViewInit(){
     requestAnimationFrame(()=>{
@@ -31,11 +33,14 @@ export class FreeModeComponent{
 
         const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
 
-        const controls = new OrbitControls(camera, renderer.domElement);
+        const controlsMouse = new OrbitControls(camera, renderer.domElement);
+        controlsMouse.enableKeys = false;
+
+        const controlsFps = new PointerLockControls(camera, renderer.domElement);
 
         camera.lookAt(0, 0, 0);
         camera.position.set(10, 5, 10);
-        controls.update();
+        controlsMouse.update();
 
         const planeGeo = new THREE.PlaneGeometry(200, 200);
         const planeMat = new THREE.MeshBasicMaterial({ color: 0x004a63, side: THREE.DoubleSide});
@@ -63,8 +68,79 @@ export class FreeModeComponent{
 
         renderer.setClearColor(0x4b4b4b, 1);
 
+        const velocity = new THREE.Vector3();
+        const direction = new THREE.Vector3();
+
+        let moveForward = false;
+        let moveBackward = false;
+        let moveLeft = false;
+        let moveRight = false;
+
+        const keys = {
+          'KeyW': 'forward',
+          'KeyS': 'backward',
+          'KeyA': 'left',
+          'KeyD': 'right',
+        };
+
+        window.addEventListener('keydown', (e) =>{
+          if(e.ctrlKey && e.key.toLowerCase() === "q"){
+            this.activeFps = !this.activeFps;
+            if(this.activeFps){
+              controlsFps.lock();
+              return;
+            }
+
+            controlsFps.unlock();
+          }
+
+          if(this.activeFps){
+            switch (e.code) {
+              case 'KeyW': moveForward = true; break;
+              case 'KeyS': moveBackward = true; break;
+              case 'KeyA': moveLeft = true; break;
+              case 'KeyD': moveRight = true; break;
+            }
+          }
+        });
+
+        document.addEventListener('keyup', (e) =>{
+          switch (e.code) {
+            case 'KeyW': moveForward = false; break;
+            case 'KeyS': moveBackward = false; break;
+            case 'KeyA': moveLeft = false; break;
+            case 'KeyD': moveRight = false; break;
+          }
+        });
+
+        document.addEventListener('pointerlockchange', () => {
+          if(document.pointerLockElement !== renderer.domElement){
+            this.activeFps = false;
+          }
+        });
+
+
         function animate(){
           world.step(timeStep);
+
+          direction.z = Number(moveForward) - Number(moveBackward);
+          direction.x = Number(moveLeft) - Number(moveRight);
+          direction.normalize();
+
+          if(controlsFps.isLocked){
+            velocity.x -= direction.x * 0.1;
+            velocity.z -= direction.z * 0.1;
+
+            const deltaPosition = new THREE.Vector3(velocity.x, 0, velocity.z);
+            deltaPosition.applyQuaternion(camera.quaternion);
+
+            camera.position.add(deltaPosition);
+
+            velocity.x *= 0.9;
+            velocity.z *= 0.9;
+          }
+
+
 
           plane.position.copy(planeBody.position);
           plane.quaternion.copy(planeBody.quaternion);

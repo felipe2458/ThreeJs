@@ -1,7 +1,8 @@
 import { Component, ElementRef, Input, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { ObjRotation, ReadyMadeObj } from 'src/app/interfaces/interface';
+import { ObjRotation, ObjRotationVelocity, ReadyMadeObj } from 'src/app/interfaces/interface';
 import { FormsModule } from '@angular/forms';
 import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 @Component({
   selector: 'app-options-ready-made',
@@ -51,6 +52,10 @@ export class OptionsReadyMadeComponent{
       const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
       camera.position.set(0, 0, 2);
 
+      const controls = new OrbitControls(camera, renderer.domElement);
+      controls.enableZoom = false;
+      controls.enablePan = false;
+
       const mesh = this.obj.obj();
       mesh.position.set(0, 0, 0);
       scene.add(mesh);
@@ -59,14 +64,31 @@ export class OptionsReadyMadeComponent{
       light.position.set(0, 0, 1);
       scene.add(light);
 
-      const ambientLight = new THREE.AmbientLight(0x363636, 0.1);
+      const ambientLight = new THREE.AmbientLight(0xafafaf, 0.5);
       scene.add(ambientLight);
 
       renderer.setClearColor(0x000000, 0);
 
-      function animate(){
-        mesh.rotation.x += 0.01;
-        mesh.rotation.y += 0.01;
+      const animate = ()=>{
+        const objRot = this.objRotation;
+
+        const velocityRotation: ObjRotationVelocity = {
+          x: objRot[0].velocity === 'slow' ? 0.002 : objRot[0].velocity === 'normal' ? 0.01 : 0.05,
+          y: objRot[1].velocity === 'slow' ? 0.002 : objRot[1].velocity === 'normal' ? 0.01 : 0.05,
+          z: objRot[2].velocity === 'slow' ? 0.002 : objRot[2].velocity === 'normal' ? 0.01 : 0.05
+        }
+
+        if(this.objRotation[0].active){
+          mesh.rotation.x += velocityRotation.x;
+        };
+
+        if(this.objRotation[1].active){
+          mesh.rotation.y += velocityRotation.y;
+        };
+
+        if(this.objRotation[2].active){
+          mesh.rotation.z += velocityRotation.z;
+        };
 
         renderer.render(scene, camera);
       }

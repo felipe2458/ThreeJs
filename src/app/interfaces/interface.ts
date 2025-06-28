@@ -27,12 +27,19 @@ export interface ReadyMadeObj{
   name: string;
   selected: boolean;
   enterOptions: boolean;
-  obj: () => InstanceType<typeof THREE.Mesh>;
+  obj: (color?: number, size?: number) => InstanceType<typeof THREE.Mesh>;
 }
 
 export interface ObjRotation{
   name: string;
-  velocity: string;
+  velocity: 'slow' | 'normal' | 'fast';
   active: boolean;
   rotationInWorld: boolean;
 }
+
+export interface ObjRotationVelocity{
+  x: number;
+  y: number;
+  z: number;
+}
+

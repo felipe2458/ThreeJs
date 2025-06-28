@@ -59,4 +59,18 @@
       height: 92%;
     }
   }
+
+  .crosshair{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    background:
+      linear-gradient(to right, transparent 8px, white 9px, white 11px, transparent 12px),
+      linear-gradient(to bottom, transparent 8px, white 9px, white 11px, transparent 12px);
+  }
 }
