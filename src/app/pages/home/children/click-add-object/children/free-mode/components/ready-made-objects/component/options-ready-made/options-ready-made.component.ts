@@ -43,6 +43,11 @@ export class OptionsReadyMadeComponent implements OnInit{
   colorSelect!: ColorSelect[];
   colorSelected: 'simple-color' | 'complex-color' = 'simple-color';
 
+  renderer: InstanceType<typeof THREE.WebGLthis.Renderer>;
+  scene: InstanceType<typeof THREE.Scene>;
+  camera: InstanceType<typeof THREE.PerspectiveCamera>;
+  mesh: InstanceType<typeof THREE.Mesh>;
+
   ngOnInit(){
     this.objColor = '#' + this.obj.obj().material.color.getHexString();
 
@@ -66,6 +71,25 @@ export class OptionsReadyMadeComponent implements OnInit{
     }
   }
 
+  objColorsToHex!: number[];
+  objColorToHex!: number;
+
+  updateMeshColor(colorSel: string){
+    let rotationMesh = this.mesh.rotation;
+
+    this.scene.remove(this.mesh);
+
+    if(colorSel === 'simple-color'){
+      this.mesh = this.obj.obj(this.colorSelect[0].color);
+    }else{
+      this.mesh = this.obj.obj(undefined, this.colorSelect[1].colors);
+    }
+
+    this.mesh.rotation.set(rotationMesh.x, rotationMesh.y, rotationMesh.z);
+    this.mesh.position.set(0, 0, 0);
+    this.scene.add(this.mesh);
+  }
+
   getIndexColorComplexSelect(side: string): number{
     switch(side){
       case 'right': return 0;
@@ -83,32 +107,32 @@ export class OptionsReadyMadeComponent implements OnInit{
       const width = this.objEl.nativeElement.offsetWidth;
       const height = this.objEl.nativeElement.offsetHeight;
 
-      const renderer = new THREE.WebGLRenderer({ alpha: true });
-      renderer.setSize(width, height);
+      this.renderer = new THREE.WebGLRenderer({ alpha: true });
+      this.renderer.setSize(width, height);
 
-      this.objEl.nativeElement.appendChild(renderer.domElement);
+      this.objEl.nativeElement.appendChild(this.renderer.domElement);
 
-      const scene = new THREE.Scene();
+      this.scene = new THREE.Scene();
 
-      const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-      camera.position.set(0, 0, 2);
+      this.camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+      this.camera.position.set(0, 0, 2);
 
-      const controls = new OrbitControls(camera, renderer.domElement);
+      const controls = new OrbitControls(this.camera, this.renderer.domElement);
       controls.enableZoom = false;
       controls.enablePan = false;
 
-      const mesh = this.obj.obj();
-      mesh.position.set(0, 0, 0);
-      scene.add(mesh);
+      this.mesh = this.obj.obj();
+      this.mesh.position.set(0, 0, 0);
+      this.scene.add(this.mesh);
 
       const light = new THREE.DirectionalLight(0xffffff, 1);
       light.position.set(0, 0, 1);
-      scene.add(light);
+      this.scene.add(light);
 
       const ambientLight = new THREE.AmbientLight(0xafafaf, 0.5);
-      scene.add(ambientLight);
+      this.scene.add(ambientLight);
 
-      renderer.setClearColor(0x000000, 0);
+      this.renderer.setClearColor(0x000000, 0);
 
       const animate = ()=>{
         const objRot = this.objRotation;
@@ -120,27 +144,36 @@ export class OptionsReadyMadeComponent implements OnInit{
         }
 
         if(this.objRotation[0].active){
-          mesh.rotation.x += velocityRotation.x;
+          this.mesh.rotation.x += velocityRotation.x;
         }else{
-          mesh.rotation.x = 0;
+          this.mesh.rotation.x = 0;
         };
 
         if(this.objRotation[1].active){
-          mesh.rotation.y += velocityRotation.y;
+          this.mesh.rotation.y += velocityRotation.y;
         }else{
-          mesh.rotation.y = 0;
+          this.mesh.rotation.y = 0;
         };
 
         if(this.objRotation[2].active){
-          mesh.rotation.z += velocityRotation.z;
+          this.mesh.rotation.z += velocityRotation.z;
         }else{
-          mesh.rotation.z = 0;
+          this.mesh.rotation.z = 0;
         };
 
-        renderer.render(scene, camera);
+        this.renderer.render(this.scene, this.camera);
       }
 
-      renderer.setAnimationLoop(animate);
+      this.renderer.setAnimationLoop(animate);
+
+      window.addEventListener('resize', () => {
+      const newWidth = this.objEl.nativeElement.offsetWidth;
+      const newHeight = this.objEl.nativeElement.offsetHeight;
+
+        this.camera.aspect = newWidth / newHeight;
+        this.camera.updateProjectionMatrix();
+        this.renderer.setSize(newWidth, newHeight);
+      });
     })
   }
 }

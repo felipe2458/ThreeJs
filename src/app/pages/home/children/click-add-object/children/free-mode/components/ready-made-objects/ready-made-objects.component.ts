@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChildren } from '@angular/core';
+import { Component, ElementRef, QueryList, ViewChildren } from '@angular/core';
 import { OptionsReadyMadeComponent } from './component/options-ready-made/options-ready-made.component';
 import { ReadyMadeObj } from 'src/app/interfaces/interface';
 import { CommonModule } from '@angular/common';
@@ -18,9 +18,23 @@ export class ReadyMadeObjectsComponent{
       name: 'simple box',
       selected: false,
       enterOptions: false,
-      obj: (color = 0x00e2b1, size = 1) => {
+      obj: (color = "#00e2b1", colors, size = 1) => {
         const boxGeo = new THREE.BoxGeometry(size, size, size);
-        const boxMat = new THREE.MeshStandardMaterial({ color, side: THREE.DoubleSide });
+        let boxMat: InstanceType<typeof THREE.MeshStandardMaterial> | InstanceType<typeof THREE.MeshStandardMaterial>[];
+
+        if(colors){
+          boxMat = [
+            new THREE.MeshStandardMaterial({ color: colors[0] }),
+            new THREE.MeshStandardMaterial({ color: colors[1] }),
+            new THREE.MeshStandardMaterial({ color: colors[2] }),
+            new THREE.MeshStandardMaterial({ color: colors[3] }),
+            new THREE.MeshStandardMaterial({ color: colors[4] }),
+            new THREE.MeshStandardMaterial({ color: colors[5] })
+          ];
+        }else{
+          boxMat = new THREE.MeshStandardMaterial({ color: color });
+        }
+
         return new THREE.Mesh(boxGeo, boxMat);
       }
     }
@@ -30,7 +44,7 @@ export class ReadyMadeObjectsComponent{
     return this.objects.some(obj => obj.enterOptions);
   }
 
-  @ViewChildren('object') objectRef!: ElementRef[] | undefined;
+  @ViewChildren('object') objectRef!: QueryList<ElementRef>;
 
   ngAfterViewInit(){
     requestAnimationFrame(()=>{
@@ -80,6 +94,17 @@ export class ReadyMadeObjectsComponent{
         }
 
         renderer.setAnimationLoop(animate);
+
+        window.addEventListener('resize', () => {
+          this.objectRef.forEach((el)=>{
+            const newWidth = el.nativeElement.offsetWidth;
+            const newHeight = el.nativeElement.offsetHeight;
+
+            camera.aspect = newWidth / newHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(newWidth, newHeight);
+          })
+        });
       })
     })
   }

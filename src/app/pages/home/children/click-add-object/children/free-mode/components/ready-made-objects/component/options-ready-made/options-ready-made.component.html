@@ -55,14 +55,15 @@
               <ul>
                 <li>
                   <label [for]="colorSel.name + '-active'" [style.pointerEvents]="'all'">active:</label>
-                  <input type="radio" name="color-active" [id]="colorSel.name + '-active'" [style.pointerEvents]="'all'" [value]="colorSel.name" [(ngModel)]="colorSelected">
+
+                  <input type="radio" name="color-active" [id]="colorSel.name + '-active'" [style.pointerEvents]="'all'" [value]="colorSel.name" [(ngModel)]="colorSelected" (change)="updateMeshColor(colorSel.name)">
                 </li>
 
                 @if(colorSel.color){
                   <li>
                     <label>
                       color:
-                      <input type="color" [id]="colorSel.name + 'color'" [value]="colorSel.color" [(ngModel)]="colorSel.color">
+                      <input type="color" [id]="colorSel.name + 'color'" [value]="colorSel.color" [(ngModel)]="colorSel.color" (input)="updateMeshColor(colorSel.name)">
 
                       <div class="input-color" [style.backgroundColor]="colorSel.color"></div><!-- input-color -->
                     </label>
@@ -85,7 +86,7 @@
                   <li>
                     <label>
                       color:
-                      <input type="color" [id]="colorSel.name + 'color'" [value]="colorSel.color" [(ngModel)]="selectedColorComplex">
+                      <input type="color" [id]="colorSel.name + 'color'" [value]="colorSel.color" [(ngModel)]="selectedColorComplex" (input)="updateMeshColor(colorSel.name)">
 
                       <div class="input-color" [style.backgroundColor]="selectedColorComplex"></div><!-- input-color -->
                     </label>

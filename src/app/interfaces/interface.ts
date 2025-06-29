@@ -27,7 +27,7 @@ export interface ReadyMadeObj{
   name: string;
   selected: boolean;
   enterOptions: boolean;
-  obj: (color?: number, size?: number) => InstanceType<typeof THREE.Mesh>;
+  obj: (color?: string, colors?: string[], size?: number) => InstanceType<typeof THREE.Mesh>;
 }
 
 export interface ObjRotation{
