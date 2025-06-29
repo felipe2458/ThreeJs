@@ -2,7 +2,6 @@
   width: 100%;
   height: 100%;
   justify-content: space-evenly;
-  padding-top: 1rem !important;
 
   .content-obj{
     width: 8rem;
@@ -11,10 +10,11 @@
     flex-direction: column;
     align-items: center;
     gap: .4rem;
+    margin-top: 1rem !important;
 
     .obj{
       width: 100%;
-      height: 80%;
+      height: 100%;
     }
 
     input{
@@ -29,5 +29,9 @@
       cursor: pointer;
       font-size: 15px;
     }
+  }
+
+  .content-obj-selected{
+    height: 100%;
   }
 }

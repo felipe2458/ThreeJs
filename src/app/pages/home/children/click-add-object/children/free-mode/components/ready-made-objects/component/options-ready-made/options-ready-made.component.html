@@ -2,9 +2,19 @@
   <div class="obj" #object></div><!-- obj -->
   <div class="obj-options-wrapper">
     <header>
-      <h4>Rotation</h4>
+      <h4>
+        Rotation
 
-      <div class="container-inputs">
+        <button [title]="expandsOptions.rotation ? 'expand less' : 'expand more'" (click)="expandsOptions.rotation = !expandsOptions.rotation">
+          @if(expandsOptions.rotation){
+            <mat-icon>expand_less</mat-icon>
+          }@else{
+            <mat-icon>expand_more</mat-icon>
+          }
+        </button>
+      </h4>
+
+      <div class="container-inputs" [style.display]="expandsOptions.rotation ? 'flex' : 'none'">
         @for(objRot of objRotation; track objRot){
           <div class="input-wrapper">
             <header>
@@ -38,17 +48,36 @@
 
     <section>
       <header>
-        <h6>Color and Texture</h6>
+        <h6>
+          Color and Texture
+
+        <button [title]="expandsOptions.color_and_texture.all ? 'expand less' : 'expand more'" (click)="expandsOptions.color_and_texture.all = !expandsOptions.color_and_texture.all">
+          @if(expandsOptions.color_and_texture.all){
+            <mat-icon>expand_less</mat-icon>
+          }@else{
+            <mat-icon>expand_more</mat-icon>
+          }
+        </button>
+        </h6>
       </header>
 
-      <h6>Colors:</h6>
+      <h6 [style.display]="expandsOptions.color_and_texture.all ? 'flex' : 'none'">
+        Colors
 
-      <div class="select-colors">
-        @for(
-          colorSel of colorSelect; track colorSel.name){
+        <button [title]="expandsOptions.color_and_texture.color ? 'expand less' : 'expand more'" (click)="expandsOptions.color_and_texture.color = !expandsOptions.color_and_texture.color">
+          @if(expandsOptions.color_and_texture.color){
+            <mat-icon>expand_less</mat-icon>
+          }@else{
+            <mat-icon>expand_more</mat-icon>
+          }
+        </button>
+      </h6>
+
+      <div class="select-colors" [style.display]="expandsOptions.color_and_texture.color && expandsOptions.color_and_texture.all ? 'flex' : 'none'">
+        @for(colorSel of colorSelect; track colorSel.name){
           <div class="input-color-wrapper">
             <header>
-              <h6>{{ colorSel.name.split('-').join(' ') }}</h6>
+              <h6>{{ colorSel.name.split('-')[0] }}</h6>
             </header>
 
             <div class="input-color-options" [style.opacity]="colorSel.name === colorSelected ? '1' : '.5'" [style.pointerEvents]="colorSel.name === colorSelected ? 'all' : 'none'">
@@ -97,6 +126,74 @@
           </div><!-- input-color-wrapper -->
         }
       </div><!-- select-colors -->
+
+      <h6 [style.display]="expandsOptions.color_and_texture.all ? 'flex' : 'none'">
+        Textures
+
+        <button [title]="expandsOptions.color_and_texture.texture ? 'expand less' : 'expand more'" (click)="expandsOptions.color_and_texture.texture = !expandsOptions.color_and_texture.texture">
+          @if(expandsOptions.color_and_texture.texture){
+            <mat-icon>expand_less</mat-icon>
+          }@else{
+            <mat-icon>expand_more</mat-icon>
+          }
+        </button>
+      </h6>
+
+      <div class="select-textures" [style.display]="expandsOptions.color_and_texture.texture && expandsOptions.color_and_texture.all ? 'flex' : 'none'">
+        @for(objTex of objTexture; track objTex.name){
+          <div class="textures-wrapper">
+            <header>
+              <h6>{{ objTex.name.split('-')[0] }}</h6>
+            </header>
+
+            <div class="texture-options" [style.opacity]="objTex.name === textureSel ? '1' : '.5'" [style.pointerEvents]="objTex.name === textureSel ? 'all' : 'none'">
+              <ol>
+                <li>
+                  <label [style.pointerEvents]="'all'">
+                    active:
+
+                    <input type="radio" name="texture-active" [value]="objTex.name" [(ngModel)]="textureSel">
+                  </label>
+                </li>
+                @if(objTex.name === 'simple-texture'){
+                  <li>
+                    <label>
+                      Texture:
+
+                      <input type="file" [id]="objTex.name + 'sel'" accept=".jpg, .jpeg, .png, .webp" [style.display]="'none'" (change)="updateTexture($event, objTex)">
+
+                      <div class="texture-view" [style.backgroundImage]="'url(' + objTex.texture + ')'"></div><!-- texture-view -->
+                    </label>
+                  </li>
+                }@else{
+                  <li>
+                    <label>
+                      side:
+                      <select [(ngModel)]="textureComplexSelectedSide">
+                        <option value="front">front</option>
+                        <option value="back">back</option>
+                        <option value="top">top</option>
+                        <option value="bottom">bottom</option>
+                        <option value="left">left</option>
+                        <option value="right">right</option>
+                      </select>
+                    </label>
+                  </li>
+                  <li>
+                    <label>
+                      texture:
+
+                      <input type="file" accept=".jpg, .jpeg, .png, .webp" [id]="objTex.name + 'sel'" [style.display]="'none'" (change)="updateTexture($event, objTex)">
+
+                      <div class="texture-view" [style.backgroundImage]="'url(' + selectedTextureComplex + ')'"></div><!-- texture-view -->
+                    </label>
+                  </li>
+                }
+              </ol>
+            </div><!-- texture-options -->
+          </div><!-- textures-wrapper -->
+        }
+      </div><!-- select-textures -->
     </section>
   </div><!-- obj-options-wrapper -->
 </div><!-- obj-wrapper -->

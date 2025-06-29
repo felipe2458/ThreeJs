@@ -48,4 +48,10 @@ export interface ColorSelect{
   colors?: [string, string, string, string, string, string];
 }
 
+export interface ObjTexture{
+  name: string;
+  texture?: string | undefined;
+  textures?: [string, string, string, string, string, string];
+}
+
 export type ColorComplexSelectedSide = 'top' | 'bottom' | 'left' | 'right' | 'front' | 'back';

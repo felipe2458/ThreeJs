@@ -1,15 +1,15 @@
-import { ColorComplexSelectedSide } from './../../../../../../../../../../interfaces/interface';
+import { ColorComplexSelectedSide, ObjTexture } from './../../../../../../../../../../interfaces/interface';
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { ColorSelect, ObjRotation, ObjRotationVelocity, ReadyMadeObj } from 'src/app/interfaces/interface';
 import { FormsModule } from '@angular/forms';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { CommonModule } from '@angular/common';
-
+import { MatIconModule } from '@angular/material/icon';
 @Component({
   selector: 'app-options-ready-made',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, MatIconModule],
   templateUrl: './options-ready-made.component.html',
   styleUrls: ['./options-ready-made.component.scss'],
 })
@@ -39,9 +39,25 @@ export class OptionsReadyMadeComponent implements OnInit{
     }
   ]
 
+  expandsOptions = {
+    rotation: true,
+    color_and_texture: {
+      all: true,
+      color: true,
+      texture: true
+    }
+  }
+
   objColor!: string;
   colorSelect!: ColorSelect[];
-  colorSelected: 'simple-color' | 'complex-color' = 'simple-color';
+  colorSelected: string = 'simple-color';
+
+  objTexture: ObjTexture[] = [
+    { name: 'simple-texture', texture: undefined },
+    { name: 'complex-texture', textures: ['', '', '', '', '', ''] }
+  ]
+
+  textureSel: string = 'simple-texture';
 
   renderer: InstanceType<typeof THREE.WebGLthis.Renderer>;
   scene: InstanceType<typeof THREE.Scene>;
@@ -58,16 +74,29 @@ export class OptionsReadyMadeComponent implements OnInit{
   }
 
   colorComplexSelectedSide: ColorComplexSelectedSide = 'front';
+  textureComplexSelectedSide: ColorComplexSelectedSide = 'front';
 
   get selectedColorComplex(): string | undefined{
-    const index = this.getIndexColorComplexSelect(this.colorComplexSelectedSide);
+    const index = this.getIndexComplexSelect(this.colorComplexSelectedSide);
     return this.colorSelect[1].colors?.[index];
   }
 
   set selectedColorComplex(val: string){
-    const index = this.getIndexColorComplexSelect(this.colorComplexSelectedSide);
+    const index = this.getIndexComplexSelect(this.colorComplexSelectedSide);
     if(this.colorSelect[1].colors) {
       this.colorSelect[1].colors[index] = val;
+    }
+  }
+
+  get selectedTextureComplex(): string | undefined{
+    const index = this.getIndexComplexSelect(this.textureComplexSelectedSide);
+    return this.objTexture[1].textures?.[index];
+  }
+
+  set selectedTextureComplex(val: string){
+    const index = this.getIndexComplexSelect(this.textureComplexSelectedSide);
+    if(this.objTexture[1].textures){
+      this.objTexture[1].textures[index] = val;
     }
   }
 
@@ -90,7 +119,23 @@ export class OptionsReadyMadeComponent implements OnInit{
     this.scene.add(this.mesh);
   }
 
-  getIndexColorComplexSelect(side: string): number{
+  updateTexture(e: Event, Obj: ObjTexture){
+    const input = e.target as HTMLInputElement;
+    const file = input.files?.[0];
+
+    if(file && file.type.startsWith('image/')){
+      if(Obj.name === 'simple-texture'){
+        Obj.texture = URL.createObjectURL(file);
+      }else{
+        const index = this.getIndexComplexSelect(this.textureComplexSelectedSide);
+        if(Obj.textures){
+          Obj.textures[index] = URL.createObjectURL(file);
+        }
+      }
+    }
+  }
+
+  getIndexComplexSelect(side: string): number{
     switch(side){
       case 'right': return 0;
       case 'left': return 1;
